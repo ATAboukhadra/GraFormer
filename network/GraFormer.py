@@ -191,7 +191,10 @@ class GraphNet(nn.Module):
     def __init__(self, in_features=2, out_features=2, n_pts=21):
         super(GraphNet, self).__init__()
 
-        self.A_hat = Parameter(torch.eye(n_pts).float(), requires_grad=True)
+        requires_grad=True
+        if n_pts > 100:
+            requires_grad = False
+        self.A_hat = Parameter(torch.eye(n_pts).float(), requires_grad=requires_grad)
         self.gconv1 = LAM_Gconv(in_features, in_features * 2)
         self.gconv2 = LAM_Gconv(in_features * 2, out_features, activation=None)
 
