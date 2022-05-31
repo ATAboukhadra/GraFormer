@@ -29,6 +29,10 @@ def p_mpjpe(predicted, target):
     """
     assert predicted.shape == target.shape
 
+    # Convert to Numpy because this metric needs numpy array
+    predicted = predicted.cpu().detach().numpy()
+    target = target.cpu().detach().numpy()
+    
     muX = np.mean(target, axis=1, keepdims=True)
     muY = np.mean(predicted, axis=1, keepdims=True)
 

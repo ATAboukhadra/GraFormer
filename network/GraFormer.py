@@ -226,7 +226,7 @@ class GraFormer(nn.Module):
         self.gconv_input = _gconv_input
         self.gconv_layers = nn.ModuleList(_gconv_layers)
         self.atten_layers = nn.ModuleList(_attention_layer)
-        self.gconv_output = ChebConv(in_c=dim_model, out_c=3, K=2)
+        self.gconv_output = ChebConv(in_c=dim_model, out_c=coords_dim[1], K=2)
 
     def forward(self, x, mask):
         out = self.gconv_input(x, self.adj)
