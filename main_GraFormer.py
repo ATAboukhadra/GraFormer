@@ -25,7 +25,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='PyTorch training script')
 
     # General arguments
-    parser.add_argument('-d', '--dataset', default='h36m', type=str, metavar='NAME', help='target dataset')
+    parser.add_argument('-d', '--dataset_path', default='../HOPE/datasets/ho-v3-mesh/', type=str, metavar='NAME', help='target dataset')
     # sh_ft_h36m, gt
     parser.add_argument('-k', '--keypoints', default='gt', type=str, metavar='NAME', help='2D detections to use')
     parser.add_argument('-a', '--actions', default='*', type=str, metavar='LIST',
@@ -74,7 +74,7 @@ def main(args):
     print('==> Using settings {}'.format(args))
 
     print('==> Loading dataset...')
-    dataset_path = path.join('../HOPE/datasets/ho-v3-mesh/')
+    dataset_path = path.join('')
 
     cudnn.benchmark = True
     device = torch.device("cuda")
@@ -129,7 +129,7 @@ def main(args):
     if args.evaluate:
         print('==> Evaluating...')
 
-        valset = Dataset(dataset_path, load_set='val', seq_length=args.seq_length, mesh=args.mesh)
+        valset = Dataset(args.dataset_path, load_set='val', seq_length=args.seq_length, mesh=args.mesh)
         valid_loader = torch.utils.data.DataLoader(valset, batch_size=32, shuffle=True, num_workers=16)    
         errors_p1, errors_p2 = evaluate(valid_loader, model_pos, device)
 
@@ -137,10 +137,10 @@ def main(args):
         print('Protocol #2 (P-MPJPE) action-wise average: {:.2f} (mm)'.format(np.mean(errors_p2).item()))
         exit(0)
 
-    trainset = Dataset(dataset_path, load_set='train', seq_length=args.seq_length, mesh=args.mesh)
+    trainset = Dataset(args.dataset_path, load_set='train', seq_length=args.seq_length, mesh=args.mesh)
     train_loader = torch.utils.data.DataLoader(trainset, batch_size=32, shuffle=True, num_workers=16)    
     
-    valset = Dataset(dataset_path, load_set='val', seq_length=args.seq_length, mesh=args.mesh)
+    valset = Dataset(args.dataset_path, load_set='val', seq_length=args.seq_length, mesh=args.mesh)
     valid_loader = torch.utils.data.DataLoader(valset, batch_size=32, shuffle=True, num_workers=16)    
     
     for epoch in range(start_epoch, args.epochs):
